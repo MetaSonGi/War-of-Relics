@@ -68,8 +68,30 @@
 
 ---
 
+## 🛠️ 구현된 코드: 유물 시스템
+`War-of-Relics/Assets/Scripts/Relics/`
+
+| 파일 | 역할 |
+|---|---|
+| `Core/RelicStats.cs` | 공격·방어·체력·회피·쿨다운 감소·마법 저항·반격·이동속도 수치와 합산, 상한 적용(회피 60%, 쿨감 40% 등) |
+| `Core/Relic.cs` | 유물 정의 — 슬롯(무기/목걸이/장갑/머리띠), 특수 능력(연속공격), 세트 |
+| `Core/RelicDatabase.cs` | 위 표의 유물 4종(초기 밸런스 값)과 세트 **삼국의 유산**(2개: 방어 +5 / 3개: 공격 +10·체력 +20) |
+| `Core/RelicLoadout.cs` | 수집·장착·해제(슬롯당 1개, 같은 슬롯은 교체), 활성 세트 효과, 최종 능력치, 저장·복원용 id 목록, 변경 이벤트 |
+| `PlayerRelics.cs` | 플레이어에 붙이는 컴포넌트 — 기본 능력치 + 유물 합산, 시작 시 자동 불러오기 · `Save()`로 PlayerPrefs 저장 |
+| `Tests~/RelicTests.cs` | 점검 14항목 (Unity가 무시하는 폴더) |
+
+```csharp
+var relics = GetComponent<PlayerRelics>();
+relics.PickUp("heavenly-necklace");          // 수집 + 빈 슬롯이면 자동 장착
+float atk = relics.CurrentStats.attack;       // 기본 20 + 백제의 장검 15 (시작 유물)
+relics.Loadout.Unequip(RelicSlot.Necklace);
+relics.Save();                                // PlayerPrefs에 저장
+```
+검증: Mono `mcs`로 컴파일 후 14항목 통과(수치 합산·상한, 슬롯 교체, 미보유 장착 거부, 세트 2/3개 효과, 저장/복원). Unity 에디터 실행은 미검증.
+
+---
+
 ## 🧑‍💻 제작자
 
 > 기획 · 개발 · 아트 by [Metasongi]  
-> Contact: [@gmail.com]  
 > GitHub: https://github.com/Metasongi
